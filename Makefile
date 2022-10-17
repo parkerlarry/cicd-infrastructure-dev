@@ -17,6 +17,21 @@ jenkins-destroy:
 	cd jenkins; vagrant destroy -f;
 	rm -rf jenkins
 
-vagrant-up: jenkins-up
-vagrant-down: jenkins-down
-vagrant-destroy: jenkins-destroy
+nexus-up:
+	if [ -e "nexus" ]; then \
+		cd nexus; vagrant reload; \
+	else \
+		git clone git@github.com:parkerlarry/nexus; \
+		cd nexus; vagrant up; \
+	fi
+
+nexus-down:
+	cd nexus; vagrant halt
+
+nexus-destroy:
+	cd nexus; vagrant destroy -f;
+	rm -rf nexus
+
+vagrant-up: jenkins-up nexus-up
+vagrant-down: jenkins-down nexus-down
+vagrant-destroy: jenkins-destroy nexus-destroy
